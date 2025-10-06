@@ -33,3 +33,23 @@ Route::get('/inspections/schedule', function () {
 Route::get('/inspections/{id}', function ($id) {
     return view('inspection-details');
 });
+
+Route::get('/clients', function () {
+    return view('clients');
+});
+
+Route::get('/bookings', function () {
+    return view('bookings');
+});
+
+Route::get('/reports', function () {
+    return view('reports');
+});
+
+Route::get('/report-templates', function () {
+    return view('report-templates');
+});
+
+Route::get('/form-builder', function () {
+    return view('form-builder');
+});
