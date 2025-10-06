@@ -1,0 +1,213 @@
+Side Menu
+
+
+Company Sign Up
+Individual Sign Up
+Dashboard
+Inspections
+Clients
+Properties
+Reports
+Bookings
+Dashboard
+Inspections
+Clients
+Properties
+Reports
+Bookings
+Inspection Management
+Report Templates
+Form Builder
+Inspection Types
+Inspection Management
+Report Templates
+Form Builder
+Inspection Types
+Business & Staff
+Inspectors
+Staff Management
+—-------------------
+N/A
+System & Settings
+Subscription Management
+Notifications & Reminders
+Audit Logs
+Settings
+System & Settings
+Subscription Management
+Notifications & Reminders
+Audit Logs
+Settings
+
+
+
+Dashboard Items
+
+
+Total Inspections
+Total Clients
+Total Properties
+Pending Reports
+Upcoming Inspections
+
+
+Properties Page:
+
+The Properties Page will allow users to view, add, edit, and manage all properties associated with inspections. It should display a list of properties, provide filtering options, and include details for each property.
+
+
+Properties List (Table View)
+A sortable and searchable table that displays all properties. Each row represents a property, including:
+Property Name
+Property Type (Residential, Commercial, Industrial, etc.)
+Client Name (Owner/Responsible party)
+Location (Address, City, State)
+Inspection Status (Available for Inspection, Pending, In Progress, Completed, Requires Follow-up)
+Last Inspection Date
+Next Scheduled Inspection Date
+Inspector Assigned
+Action Buttons (View, Edit, Delete)
+
+Features to Include:
+Search Bar – Search by name, location, or client.
+Filter Options – Filter by property type, status, inspector, or inspection dates.
+Pagination – To handle large property lists efficiently.
+
+B. Property Details Page (When Clicking a Property)( show into new page ) 
+A detailed page showing full property information and inspection history. It should include:
+1. General Property Information
+Property Name
+Property Type
+Client Name & Contact Details
+Property Address (Street, City, State, Zip)
+Building Size (Sq. Ft or Acres)
+Number of Floors
+Year Built
+Additional Notes / Description
+2. Inspection History
+A list of all past inspections with:
+Inspection Date
+Inspector Name
+Inspection Type
+Inspection Status (Completed, Pending, Follow-up Required)
+Report Link (Download/View Report)
+3. Upcoming Inspections
+Next Scheduled Inspection Date
+Assigned Inspector
+Checklist/Form for Upcoming Inspection
+Option to Reschedule Inspection
+4. Attachments & Media
+Property Photos
+Inspection Reports (PDF, DOCX)
+Blueprints / Floor Plans
+Additional Documents
+Features to Include:
+Edit Property Details – Users can modify property details.
+Delete Property – Option to delete a property (with confirmation).
+Attach & View Media Files – Upload property-related documents.
+C. Add New Property Form
+A form to add a new property with the following fields:
+Property Name
+Property Type (Dropdown: Residential, Commercial, Industrial, etc.)
+Client Name (Link to Client Management)
+Address
+Building Size (sq ft or Acres)
+Floors
+No of Rooms
+Construction Year
+Additional Notes
+Upload Images & Documents
+Integration with Other Modules
+Client Management – Each property should be linked to a client.
+Inspection Reports – Should pull data from past inspections.
+
+1. Inspections Page Overview
+The Inspections Page should allow users to view, track, schedule, and manage inspections. It should have filters, sorting options, and quick actions to manage inspection data efficiently.
+
+2. Key Sections on the Inspections Page
+A. Inspections List (Table View)
+A sortable and searchable table displaying all inspections. Each row represents an inspection, including:
+Inspection ID (Auto-generated unique ID)
+Property Name (Linked to the property details page)
+Client Name (Linked to client details)
+Inspection Type (E.g., Structural, Safety, Fire Compliance)
+Inspector Assigned (Linked to inspector profile)
+Inspection Date & Time
+Inspection Status (Scheduled, In Progress, Completed, Requires Follow-up)
+Report Status (Draft, Pending, Completed)
+Action Buttons (View, Edit, Reschedule, Delete)
+Features to Include:
+Search Bar – Search inspections by property name, client, inspector, or ID.
+Filter Options – Filter by status, inspection type, property, date, or assigned inspector.
+Sorting – Sort by date, property, status, or inspector.
+Pagination – Handle large datasets efficiently.
+
+B. Inspection Details Page (When Clicking an Inspection) (new page)
+A detailed page displaying full inspection information. It should include:
+1. General Inspection Information
+Inspection ID
+Inspection Type
+Property Name & Address (Linked to the property details)
+Client Name & Contact Details
+Inspector Assigned
+Inspection Date & Time
+Inspection Notes (Pre-Inspection Checklist, Special Instructions)
+2. Inspection Form/Checklist
+Checklist Items (Checkpoints)
+Status for Each Checkpoint (Pass, Fail, Needs Repair)
+Comments & Notes for Each Checkpoint
+Photos or Evidence Uploads (If Required)
+3. Inspection Report
+Inspection Summary
+Pass/Fail Status
+Detailed Observations
+Recommendations for Improvements
+PDF/Downloadable Report
+Features to Include:
+Edit Inspection Details – Modify date, assigned inspector, or checklist.
+Delete Inspection – Remove an inspection (with confirmation prompt).
+Reschedule Inspection – Quickly change the inspection date/time.
+Generate Reports – Option to create and download a structured inspection report.
+
+C. Schedule New Inspection Form
+A form to add a new inspection with the following fields:
+Property Selection (Dropdown of registered properties)
+Client Selection (Auto-fill based on property)
+Inspection Type (Dropdown: Structural, Fire Safety, Compliance, etc.)
+Select Inspector (Dropdown of available inspectors)
+Date & Time Picker (Timezone)
+Additional Notes or Special Instructions
+Upload Pre-Inspection Documents (Optional)
+✅ Features to Include:
+Auto-Suggest for Properties & Clients (Link with existing records)
+Inspector Availability Check (Show available slots for assigned inspectors)
+Validation for Required Fields
+Notification to Inspector & Client Upon Scheduling
+
+D. Dashboard View of Inspections (For Quick Stats)
+Total Inspections
+Inspections Completed This Month
+Pending Inspections
+Upcoming Inspections
+
+3. User Roles & Permissions
+Different user roles should have specific permissions on the Inspections page:
+Admin: Full control (View, Add, Edit, Assign, Delete, Generate Reports)
+Inspector: Can view assigned inspections, mark checklist items, upload findings, generate reports.
+Client: Can view their own inspection reports & request new inspections.
+
+4. Notifications & Alerts
+Upcoming Inspection Reminders
+Follow-up Inspection Alerts
+Pending Inspection Reports Notification
+Inspection Status Updates for Clients & Inspectors
+
+5. Integration with Other Modules
+Property Management – Each inspection should be linked to a property.
+Client Management – Clients should have access to their own inspections.
+Reports Module – Automatically generate inspection reports.
+
+
+
+
+
