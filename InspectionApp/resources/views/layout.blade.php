@@ -150,51 +150,34 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/report-templates">
+                            <a class="nav-link @yield('templates-active')" href="{{ route('templates.index') }}">
                                 <i class="bi bi-file-earmark-ruled"></i> Report Templates
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/form-builder">
-                                <i class="bi bi-ui-checks"></i> Form Builder
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/inspection-types">
+                            <a class="nav-link" href="{{ route('inspection-types.index') }}">
                                 <i class="bi bi-tags"></i> Inspection Types
-                            </a>
-                        </li>
-                        
-                        <div class="sidebar-heading">Business & Staff</div>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/inspectors">
-                                <i class="bi bi-person-badge"></i> Inspectors
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/staff">
-                                <i class="bi bi-person-workspace"></i> Staff Management
                             </a>
                         </li>
                         
                         <div class="sidebar-heading">System & Settings</div>
                         <li class="nav-item">
-                            <a class="nav-link" href="/subscription">
-                                <i class="bi bi-credit-card"></i> Subscription Management
+                            <a class="nav-link" href="{{ route('subscriptions.index') }}">
+                                <i class="bi bi-credit-card"></i> Subscriptions
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/notifications">
-                                <i class="bi bi-bell"></i> Notifications & Reminders
+                            <a class="nav-link" href="{{ route('notifications.index') }}">
+                                <i class="bi bi-bell"></i> Notifications
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/audit-logs">
+                            <a class="nav-link" href="{{ route('audit-logs.index') }}">
                                 <i class="bi bi-journal-text"></i> Audit Logs
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/settings">
+                            <a class="nav-link" href="{{ route('settings.index') }}">
                                 <i class="bi bi-gear"></i> Settings
                             </a>
                         </li>
