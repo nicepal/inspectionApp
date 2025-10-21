@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +29,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('properties', PropertyController::class);
     Route::resource('inspections', InspectionController::class);
     Route::resource('templates', TemplateController::class);
+    Route::get('/template-center', [TemplateController::class, 'templateCenter'])->name('template-center.index');
+    Route::post('/template-center/{template}/save', [TemplateController::class, 'saveToMyTemplates'])->name('template-center.save');
     Route::resource('reports', ReportController::class);
     Route::resource('inspection-types', InspectionTypeController::class);
     Route::resource('subscriptions', SubscriptionController::class);
+    Route::resource('staff', StaffController::class);
     
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');

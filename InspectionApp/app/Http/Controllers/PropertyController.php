@@ -10,13 +10,28 @@ use Illuminate\Validation\Rule;
 
 class PropertyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $companyId = Auth::user()->company_id;
-        $properties = Property::with(['client'])
-            ->where('company_id', $companyId)
-            ->latest()
-            ->paginate(20);
+        $query = Property::with(['client'])->where('company_id', $companyId);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('address', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%")
+                  ->orWhereHas('client', function($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('type')) {
+            $query->where('property_type', $request->type);
+        }
+
+        $properties = $query->latest()->paginate(20)->withQueryString();
         
         return view('properties', compact('properties'));
     }

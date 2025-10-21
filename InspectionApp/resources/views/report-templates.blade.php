@@ -6,10 +6,13 @@
 @section('content')
 <div class="page-header d-flex justify-content-between align-items-center">
     <div>
-        <h1 class="page-title">Report Templates</h1>
-        <p class="text-muted">Create and manage inspection report templates</p>
+        <h1 class="page-title">My Templates</h1>
+        <p class="text-muted">Create and manage your company's inspection templates</p>
     </div>
-    <div>
+    <div class="btn-group">
+        <a href="{{ route('template-center.index') }}" class="btn btn-outline-primary">
+            <i class="bi bi-collection"></i> Browse Template Center
+        </a>
         <a href="{{ route('templates.create') }}" class="btn btn-primary">
             <i class="bi bi-file-earmark-plus"></i> Create New Template
         </a>

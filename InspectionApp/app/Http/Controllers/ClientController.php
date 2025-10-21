@@ -9,12 +9,30 @@ use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $companyId = Auth::user()->company_id;
-        $clients = Client::where('company_id', $companyId)
-            ->latest()
-            ->paginate(20);
+        $query = Client::where('company_id', $companyId);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('type')) {
+            $query->where('client_type', $request->type);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $clients = $query->latest()->paginate(20)->withQueryString();
         
         return view('clients', compact('clients'));
     }

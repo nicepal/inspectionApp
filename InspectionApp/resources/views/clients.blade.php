@@ -23,6 +23,48 @@
 </div>
 @endif
 
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" action="{{ route('clients.index') }}" class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">Search</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                    value="{{ request('search') }}" placeholder="Name, email, phone, or city...">
+            </div>
+            <div class="col-md-3">
+                <label for="type" class="form-label">Client Type</label>
+                <select class="form-select" id="type" name="type">
+                    <option value="">All Types</option>
+                    <option value="individual" {{ request('type') == 'individual' ? 'selected' : '' }}>Individual</option>
+                    <option value="company" {{ request('type') == 'company' ? 'selected' : '' }}>Company</option>
+                    <option value="government" {{ request('type') == 'government' ? 'selected' : '' }}>Government</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Status</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label d-block">&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+            @if(request()->anyFilled(['search', 'type', 'status']))
+            <div class="col-12">
+                <a href="{{ route('clients.index') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-x-circle"></i> Clear Filters
+                </a>
+            </div>
+            @endif
+        </form>
+    </div>
+</div>
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">

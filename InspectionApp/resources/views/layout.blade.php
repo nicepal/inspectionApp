@@ -151,7 +151,12 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link @yield('templates-active')" href="{{ route('templates.index') }}">
-                                <i class="bi bi-file-earmark-ruled"></i> Report Templates
+                                <i class="bi bi-file-earmark-ruled"></i> My Templates
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('template-center-active')" href="{{ route('template-center.index') }}">
+                                <i class="bi bi-collection"></i> Template Center
                             </a>
                         </li>
                         <li class="nav-item">
@@ -161,6 +166,11 @@
                         </li>
                         
                         <div class="sidebar-heading">System & Settings</div>
+                        <li class="nav-item">
+                            <a class="nav-link @yield('staff-active')" href="{{ route('staff.index') }}">
+                                <i class="bi bi-person-badge"></i> Staff Management
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('subscriptions.index') }}">
                                 <i class="bi bi-credit-card"></i> Subscriptions

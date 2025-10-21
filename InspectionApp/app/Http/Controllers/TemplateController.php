@@ -11,14 +11,67 @@ class TemplateController extends Controller
     public function index()
     {
         $companyId = Auth::user()->company_id;
-        $templates = Template::where(function($query) use ($companyId) {
-            $query->where('company_id', $companyId)
-                  ->orWhere('is_public', true);
-        })
-        ->latest()
-        ->paginate(20);
+        $templates = Template::where('company_id', $companyId)
+            ->latest()
+            ->paginate(20);
         
         return view('report-templates', compact('templates'));
+    }
+
+    public function templateCenter(Request $request)
+    {
+        $query = Template::where('is_public', true)->whereNull('company_id');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        $templates = $query->latest('usage_count')->paginate(12)->withQueryString();
+        
+        return view('template-center', compact('templates'));
+    }
+
+    public function saveToMyTemplates(Template $template)
+    {
+        if (!$template->is_public || $template->company_id !== null) {
+            abort(403, 'This template is not available in the Template Center');
+        }
+
+        $companyId = Auth::user()->company_id;
+
+        $existing = Template::where('company_id', $companyId)
+            ->where('name', $template->name)
+            ->exists();
+
+        if ($existing) {
+            return redirect()->route('template-center.index')
+                ->with('error', 'You already have a template with this name');
+        }
+
+        $newTemplate = Template::create([
+            'company_id' => $companyId,
+            'created_by' => Auth::id(),
+            'name' => $template->name,
+            'category' => $template->category,
+            'description' => $template->description,
+            'fields' => $template->fields,
+            'is_public' => false,
+            'is_active' => true,
+            'status' => 'active',
+        ]);
+
+        $template->increment('usage_count');
+
+        return redirect()->route('templates.index')
+            ->with('success', 'Template saved to My Templates successfully');
     }
 
     public function create()
