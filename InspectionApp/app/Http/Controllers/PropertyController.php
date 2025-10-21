@@ -74,7 +74,7 @@ class PropertyController extends Controller
         
         $companyId = Auth::user()->company_id;
         $clients = Client::where('company_id', $companyId)->get();
-        return view('properties.edit', compact('property', 'clients'));
+        return view('property-edit', compact('property', 'clients'));
     }
 
     public function update(Request $request, Property $property)
