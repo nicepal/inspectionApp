@@ -1,55 +1,32 @@
 <?php
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    Route::resource('companies', CompanyController::class);
+    Route::resource('clients', ClientController::class);
+    Route::resource('properties', PropertyController::class);
+    Route::resource('inspections', InspectionController::class);
+    Route::resource('templates', TemplateController::class);
+    Route::resource('reports', ReportController::class);
+    
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/properties', function () {
-    return view('properties');
-});
-
-Route::get('/properties/add', function () {
-    return view('property-add');
-});
-
-Route::get('/properties/{id}', function ($id) {
-    return view('property-details');
-});
-
-Route::get('/inspections', function () {
-    return view('inspections');
-});
-
-Route::get('/inspections/schedule', function () {
-    return view('inspection-schedule');
-});
-
-Route::get('/inspections/{id}', function ($id) {
-    return view('inspection-details');
-});
-
-Route::get('/clients', function () {
-    return view('clients');
-});
-
-Route::get('/bookings', function () {
-    return view('bookings');
-});
-
-Route::get('/reports', function () {
-    return view('reports');
-});
-
-Route::get('/report-templates', function () {
-    return view('report-templates');
-});
-
-Route::get('/form-builder', function () {
-    return view('form-builder');
-});
+require __DIR__.'/auth.php';
