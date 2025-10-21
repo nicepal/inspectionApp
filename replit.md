@@ -8,6 +8,47 @@ The application follows Laravel's MVC architecture with frontend assets built us
 
 ## Recent Changes
 
+### October 21, 2025 - Advanced Modules & Complete Feature Set
+- **Inspection Types Module**: Full CRUD for managing inspection categories
+  - Database table with color coding and sort order
+  - System types (cannot be edited/deleted) vs custom company types
+  - Add/Edit forms with color picker and active status toggle
+  - Seeded with 6 default system types (Fire Safety, Risk Assessment, Property Survey, etc.)
+
+- **Subscriptions Management**: Complete subscription/billing module
+  - Tracks plan name, price, billing cycle (monthly/yearly)
+  - Status management (trial, active, cancelled, expired)
+  - Usage limits (max users, properties, inspections per month)
+  - Admin can view all subscriptions, users see only their company's
+  - Full CRUD with add/edit forms
+
+- **Notifications & Reminders**: Notification center implementation
+  - Company-wide and user-specific notifications
+  - Priority levels (low, normal, high, urgent)
+  - Mark as read functionality (individual and bulk)
+  - Action URLs for notification links
+  - Visual indicators for unread notifications
+
+- **Audit Logs**: Complete activity tracking system
+  - Logs all create/update/delete actions
+  - Tracks user, action, model type, model ID
+  - Stores old and new values for change tracking
+  - IP address and user agent logging
+  - Modal dialogs for viewing detailed log information
+  - Filterable by action, model, and user
+
+- **Settings Page**: Centralized settings management
+  - Company information (name, email, phone, address)
+  - Account information display
+  - User preferences (timezone, date format, time format)
+  - Tab-based interface for organized settings
+  - Links to profile editing
+
+- **Navigation Updates**: Updated sidebar menu
+  - Added links to all new modules
+  - Organized into logical sections
+  - Proper route helpers for all links
+
 ### October 21, 2025 - Backend Implementation & Multi-Tenant Architecture
 - **Database Schema**: Created comprehensive migrations for multi-tenant SaaS architecture
   - Companies table with subscription management fields
