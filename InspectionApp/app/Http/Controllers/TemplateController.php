@@ -18,12 +18,12 @@ class TemplateController extends Controller
         ->latest()
         ->paginate(20);
         
-        return view('templates.index', compact('templates'));
+        return view('report-templates', compact('templates'));
     }
 
     public function create()
     {
-        return view('templates.create');
+        return view('form-builder');
     }
 
     public function store(Request $request)

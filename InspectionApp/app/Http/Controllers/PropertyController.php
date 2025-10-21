@@ -18,14 +18,14 @@ class PropertyController extends Controller
             ->latest()
             ->paginate(20);
         
-        return view('properties.index', compact('properties'));
+        return view('properties', compact('properties'));
     }
 
     public function create()
     {
         $companyId = Auth::user()->company_id;
         $clients = Client::where('company_id', $companyId)->get();
-        return view('properties.create', compact('clients'));
+        return view('property-add', compact('clients'));
     }
 
     public function store(Request $request)
@@ -63,7 +63,7 @@ class PropertyController extends Controller
         }
         
         $property->load(['client', 'inspections']);
-        return view('properties.show', compact('property'));
+        return view('property-details', compact('property'));
     }
 
     public function edit(Property $property)

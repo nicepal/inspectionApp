@@ -21,7 +21,7 @@ class InspectionController extends Controller
             ->latest()
             ->paginate(20);
         
-        return view('inspections.index', compact('inspections'));
+        return view('inspections', compact('inspections'));
     }
 
     public function create()
@@ -37,7 +37,7 @@ class InspectionController extends Controller
                   ->orWhere('is_public', true);
         })->get();
         
-        return view('inspections.create', compact('properties', 'clients', 'inspectors', 'templates'));
+        return view('inspection-schedule', compact('properties', 'clients', 'inspectors', 'templates'));
     }
 
     public function store(Request $request)
@@ -72,7 +72,7 @@ class InspectionController extends Controller
         }
         
         $inspection->load(['property', 'client', 'inspector', 'template', 'reports']);
-        return view('inspections.show', compact('inspection'));
+        return view('inspection-details', compact('inspection'));
     }
 
     public function edit(Inspection $inspection)

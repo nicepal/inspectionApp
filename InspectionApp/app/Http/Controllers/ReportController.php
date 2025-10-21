@@ -18,7 +18,7 @@ class ReportController extends Controller
             ->latest()
             ->paginate(20);
         
-        return view('reports.index', compact('reports'));
+        return view('reports', compact('reports'));
     }
 
     public function create()

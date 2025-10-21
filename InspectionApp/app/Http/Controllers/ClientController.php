@@ -16,7 +16,7 @@ class ClientController extends Controller
             ->latest()
             ->paginate(20);
         
-        return view('clients.index', compact('clients'));
+        return view('clients', compact('clients'));
     }
 
     public function create()
