@@ -34,7 +34,7 @@ class ClientController extends Controller
 
         $clients = $query->latest()->paginate(20)->withQueryString();
         
-        return view('clients', compact('clients'));
+        return view('clients.index', compact('clients'));
     }
 
     public function create()
