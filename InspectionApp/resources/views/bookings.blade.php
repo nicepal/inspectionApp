@@ -10,349 +10,169 @@
         <p class="text-muted">Manage inspection bookings and schedules</p>
     </div>
     <div>
-        <a href="/inspections/schedule" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBookingModal">
             <i class="bi bi-calendar-plus"></i> New Booking
-        </a>
+        </button>
     </div>
 </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-md-3">
-        <div class="card stat-card primary">
-            <div class="card-body">
-                <h6 class="text-muted mb-2">Today's Bookings</h6>
-                <h3 class="mb-0">8</h3>
-            </div>
-        </div>
+@if(session('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+@endif
+
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Upcoming Bookings</h5>
     </div>
-    <div class="col-md-3">
-        <div class="card stat-card success">
-            <div class="card-body">
-                <h6 class="text-muted mb-2">This Week</h6>
-                <h3 class="mb-0">32</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card stat-card warning">
-            <div class="card-body">
-                <h6 class="text-muted mb-2">Pending Confirmation</h6>
-                <h3 class="mb-0">12</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card stat-card danger">
-            <div class="card-body">
-                <h6 class="text-muted mb-2">Cancelled This Month</h6>
-                <h3 class="mb-0">5</h3>
-            </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Property</th>
+                        <th>Client</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($upcomingBookings as $booking)
+                    <tr>
+                        <td>
+                            <strong>{{ \Carbon\Carbon::parse($booking->scheduled_date)->format('M d, Y') }}</strong><br>
+                            <small class="text-muted">{{ \Carbon\Carbon::parse($booking->scheduled_date)->format('h:i A') }}</small>
+                        </td>
+                        <td>{{ $booking->property->name }}</td>
+                        <td>{{ $booking->property->client->name }}</td>
+                        <td>
+                            <span class="badge bg-primary">{{ ucfirst(str_replace('_', ' ', $booking->type)) }}</span>
+                        </td>
+                        <td>
+                            <span class="badge 
+                                @if($booking->status == 'scheduled') bg-info
+                                @elseif($booking->status == 'in_progress') bg-warning
+                                @elseif($booking->status == 'completed') bg-success
+                                @else bg-secondary
+                                @endif">
+                                {{ ucfirst($booking->status) }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ route('inspections.show', $booking) }}" class="btn btn-outline-primary" title="View">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ route('inspections.edit', $booking) }}" class="btn btn-outline-secondary" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-5">
+                            <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
+                            <p class="text-muted mt-3">No upcoming bookings</p>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newBookingModal">
+                                <i class="bi bi-calendar-plus"></i> Create Your First Booking
+                            </button>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-<div class="row g-4">
-    <div class="col-lg-8">
-        <div class="card mb-4">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Calendar View</h5>
-                <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-secondary active">Month</button>
-                    <button class="btn btn-outline-secondary">Week</button>
-                    <button class="btn btn-outline-secondary">Day</button>
-                </div>
+<!-- New Booking Modal -->
+<div class="modal fade" id="newBookingModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Booking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <button class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-chevron-left"></i> Previous
+            <form action="{{ route('bookings.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="property_id" class="form-label">Property <span class="text-danger">*</span></label>
+                                <select class="form-select @error('property_id') is-invalid @enderror" 
+                                    id="property_id" name="property_id" required>
+                                    <option value="">Select property</option>
+                                    @foreach($properties as $property)
+                                    <option value="{{ $property->id }}" {{ old('property_id') == $property->id ? 'selected' : '' }}>
+                                        {{ $property->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error('property_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="scheduled_date" class="form-label">Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control @error('scheduled_date') is-invalid @enderror" 
+                                    id="scheduled_date" name="scheduled_date" value="{{ old('scheduled_date') }}" required>
+                                @error('scheduled_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="scheduled_time" class="form-label">Time <span class="text-danger">*</span></label>
+                                <input type="time" class="form-control @error('scheduled_time') is-invalid @enderror" 
+                                    id="scheduled_time" name="scheduled_time" value="{{ old('scheduled_time') }}" required>
+                                @error('scheduled_time')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="type" class="form-label">Inspection Type <span class="text-danger">*</span></label>
+                                <select class="form-select @error('type') is-invalid @enderror" 
+                                    id="type" name="type" required>
+                                    <option value="">Select type</option>
+                                    <option value="fire_safety" {{ old('type') == 'fire_safety' ? 'selected' : '' }}>Fire Safety</option>
+                                    <option value="property_survey" {{ old('type') == 'property_survey' ? 'selected' : '' }}>Property Survey</option>
+                                    <option value="compliance" {{ old('type') == 'compliance' ? 'selected' : '' }}>Compliance Check</option>
+                                    <option value="maintenance" {{ old('type') == 'maintenance' ? 'selected' : '' }}>Maintenance</option>
+                                    <option value="risk_assessment" {{ old('type') == 'risk_assessment' ? 'selected' : '' }}>Risk Assessment</option>
+                                </select>
+                                @error('type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Notes</label>
+                                <textarea class="form-control @error('notes') is-invalid @enderror" 
+                                    id="notes" name="notes" rows="4">{{ old('notes') }}</textarea>
+                                @error('notes')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Create Booking
                     </button>
-                    <h5 class="mb-0">October 2025</h5>
-                    <button class="btn btn-sm btn-outline-secondary">
-                        Next <i class="bi bi-chevron-right"></i>
-                    </button>
                 </div>
-                
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Sun</th>
-                                <th>Mon</th>
-                                <th>Tue</th>
-                                <th>Wed</th>
-                                <th>Thu</th>
-                                <th>Fri</th>
-                                <th>Sat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-muted">29</td>
-                                <td class="text-muted">30</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>7</td>
-                                <td class="bg-primary bg-opacity-10">
-                                    <strong>8</strong><br>
-                                    <small class="badge bg-primary">3 bookings</small>
-                                </td>
-                                <td class="bg-success bg-opacity-10">
-                                    <strong>9</strong><br>
-                                    <small class="badge bg-success">2 bookings</small>
-                                </td>
-                                <td class="bg-warning bg-opacity-10">
-                                    <strong>10</strong><br>
-                                    <small class="badge bg-warning">4 bookings</small>
-                                </td>
-                                <td>11</td>
-                                <td class="bg-info bg-opacity-10">
-                                    <strong>12</strong><br>
-                                    <small class="badge bg-info">1 booking</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>13</td>
-                                <td>14</td>
-                                <td class="bg-success bg-opacity-10">
-                                    <strong>15</strong><br>
-                                    <small class="badge bg-success">2 bookings</small>
-                                </td>
-                                <td>16</td>
-                                <td>17</td>
-                                <td class="bg-primary bg-opacity-10">
-                                    <strong>18</strong><br>
-                                    <small class="badge bg-primary">3 bookings</small>
-                                </td>
-                                <td>19</td>
-                            </tr>
-                            <tr>
-                                <td>20</td>
-                                <td>21</td>
-                                <td>22</td>
-                                <td>23</td>
-                                <td>24</td>
-                                <td>25</td>
-                                <td>26</td>
-                            </tr>
-                            <tr>
-                                <td>27</td>
-                                <td>28</td>
-                                <td>29</td>
-                                <td>30</td>
-                                <td>31</td>
-                                <td class="text-muted">1</td>
-                                <td class="text-muted">2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Upcoming Bookings</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Date & Time</th>
-                                <th>Property</th>
-                                <th>Client</th>
-                                <th>Inspector</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Oct 8, 2025<br>
-                                    <small class="text-muted">10:00 AM - 12:00 PM</small>
-                                </td>
-                                <td>Sunset Plaza Complex</td>
-                                <td>ABC Corporation</td>
-                                <td>John Smith</td>
-                                <td><span class="badge bg-success">Confirmed</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="/inspections/348" class="btn btn-outline-primary">View</a>
-                                        <button class="btn btn-outline-info">Reschedule</button>
-                                        <button class="btn btn-outline-danger">Cancel</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Oct 9, 2025<br>
-                                    <small class="text-muted">2:00 PM - 4:00 PM</small>
-                                </td>
-                                <td>Green Valley Apartments</td>
-                                <td>Property Holdings Inc</td>
-                                <td>Sarah Johnson</td>
-                                <td><span class="badge bg-success">Confirmed</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="/inspections/347" class="btn btn-outline-primary">View</a>
-                                        <button class="btn btn-outline-info">Reschedule</button>
-                                        <button class="btn btn-outline-danger">Cancel</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Oct 10, 2025<br>
-                                    <small class="text-muted">9:30 AM - 11:30 AM</small>
-                                </td>
-                                <td>Downtown Office Tower</td>
-                                <td>Tech Ventures LLC</td>
-                                <td>Michael Brown</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="/inspections/345" class="btn btn-outline-primary">View</a>
-                                        <button class="btn btn-outline-success">Confirm</button>
-                                        <button class="btn btn-outline-danger">Cancel</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Oct 12, 2025<br>
-                                    <small class="text-muted">1:00 PM - 3:00 PM</small>
-                                </td>
-                                <td>Marina Bay Residences</td>
-                                <td>Coastal Properties</td>
-                                <td>John Smith</td>
-                                <td><span class="badge bg-success">Confirmed</span></td>
-                                <td>
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="/inspections/343" class="btn btn-outline-primary">View</a>
-                                        <button class="btn btn-outline-info">Reschedule</button>
-                                        <button class="btn btn-outline-danger">Cancel</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <div class="card mb-4">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Quick Filters</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label">Date Range</label>
-                    <select class="form-select">
-                        <option>Today</option>
-                        <option selected>This Week</option>
-                        <option>This Month</option>
-                        <option>Custom Range</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Inspector</label>
-                    <select class="form-select">
-                        <option selected>All Inspectors</option>
-                        <option>John Smith</option>
-                        <option>Sarah Johnson</option>
-                        <option>Michael Brown</option>
-                        <option>Emily Davis</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Status</label>
-                    <select class="form-select">
-                        <option selected>All Status</option>
-                        <option>Confirmed</option>
-                        <option>Pending</option>
-                        <option>Cancelled</option>
-                        <option>Completed</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary w-100">Apply Filters</button>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Inspector Availability</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3 pb-3 border-bottom">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>John Smith</strong><br>
-                            <small class="text-muted">Fire Safety</small>
-                        </div>
-                        <span class="badge bg-success">Available</span>
-                    </div>
-                </div>
-                <div class="mb-3 pb-3 border-bottom">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Sarah Johnson</strong><br>
-                            <small class="text-muted">Structural</small>
-                        </div>
-                        <span class="badge bg-warning">Busy</span>
-                    </div>
-                </div>
-                <div class="mb-3 pb-3 border-bottom">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Michael Brown</strong><br>
-                            <small class="text-muted">Compliance</small>
-                        </div>
-                        <span class="badge bg-success">Available</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Emily Davis</strong><br>
-                            <small class="text-muted">Safety Audit</small>
-                        </div>
-                        <span class="badge bg-danger">Unavailable</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Recent Cancellations</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <small class="text-muted">Oct 5, 2025</small><br>
-                    <strong>Hillside Manor</strong><br>
-                    <small>Cancelled by client</small>
-                </div>
-                <div class="mb-3">
-                    <small class="text-muted">Oct 3, 2025</small><br>
-                    <strong>Park Avenue Building</strong><br>
-                    <small>Inspector unavailable</small>
-                </div>
-                <div>
-                    <small class="text-muted">Oct 1, 2025</small><br>
-                    <strong>Sunset Gardens</strong><br>
-                    <small>Rescheduled</small>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
