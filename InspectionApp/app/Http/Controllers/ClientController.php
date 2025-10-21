@@ -58,6 +58,7 @@ class ClientController extends Controller
             'postal_code' => 'nullable|string|max:20',
             'country' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
+            'status' => 'nullable|in:active,inactive',
         ]);
 
         $validated['company_id'] = $companyId;
