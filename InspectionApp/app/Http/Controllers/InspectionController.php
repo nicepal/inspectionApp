@@ -9,6 +9,7 @@ use App\Models\Template;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class InspectionController extends Controller
 {
@@ -41,17 +42,21 @@ class InspectionController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = Auth::user()->company_id;
+        
         $validated = $request->validate([
-            'property_id' => 'required|exists:properties,id',
-            'client_id' => 'required|exists:clients,id',
-            'inspector_id' => 'nullable|exists:users,id',
-            'template_id' => 'nullable|exists:templates,id',
+            'property_id' => ['required', Rule::exists('properties', 'id')->where('company_id', $companyId)],
+            'client_id' => ['required', Rule::exists('clients', 'id')->where('company_id', $companyId)],
+            'inspector_id' => ['nullable', Rule::exists('users', 'id')->where('company_id', $companyId)],
+            'template_id' => ['nullable', Rule::exists('templates', 'id')->where(function($query) use ($companyId) {
+                $query->where('company_id', $companyId)->orWhere('is_public', true);
+            })],
             'inspection_type' => 'required|in:fire_safety,structural,compliance,safety_audit,electrical',
             'scheduled_at' => 'required|date',
             'notes' => 'nullable|string',
         ]);
 
-        $validated['company_id'] = Auth::user()->company_id;
+        $validated['company_id'] = $companyId;
         $validated['inspection_number'] = 'INS-' . strtoupper(uniqid());
         
         $inspection = Inspection::create($validated);
@@ -96,11 +101,15 @@ class InspectionController extends Controller
             abort(403);
         }
         
+        $companyId = Auth::user()->company_id;
+        
         $validated = $request->validate([
-            'property_id' => 'required|exists:properties,id',
-            'client_id' => 'required|exists:clients,id',
-            'inspector_id' => 'nullable|exists:users,id',
-            'template_id' => 'nullable|exists:templates,id',
+            'property_id' => ['required', Rule::exists('properties', 'id')->where('company_id', $companyId)],
+            'client_id' => ['required', Rule::exists('clients', 'id')->where('company_id', $companyId)],
+            'inspector_id' => ['nullable', Rule::exists('users', 'id')->where('company_id', $companyId)],
+            'template_id' => ['nullable', Rule::exists('templates', 'id')->where(function($query) use ($companyId) {
+                $query->where('company_id', $companyId)->orWhere('is_public', true);
+            })],
             'inspection_type' => 'required|in:fire_safety,structural,compliance,safety_audit,electrical',
             'scheduled_at' => 'required|date',
             'completed_at' => 'nullable|date',

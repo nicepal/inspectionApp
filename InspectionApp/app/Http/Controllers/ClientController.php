@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
@@ -25,6 +26,8 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = Auth::user()->company_id;
+        
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'client_type' => 'required|in:individual,company,government',
@@ -39,7 +42,7 @@ class ClientController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        $validated['company_id'] = Auth::user()->company_id;
+        $validated['company_id'] = $companyId;
         $client = Client::create($validated);
 
         return redirect()->route('clients.show', $client)

@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PropertyController extends Controller
 {
@@ -29,8 +30,10 @@ class PropertyController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = Auth::user()->company_id;
+        
         $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
+            'client_id' => ['required', Rule::exists('clients', 'id')->where('company_id', $companyId)],
             'name' => 'required|string|max:255',
             'property_type' => 'nullable|in:residential,commercial,industrial',
             'address' => 'required|string',
@@ -46,7 +49,7 @@ class PropertyController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $validated['company_id'] = Auth::user()->company_id;
+        $validated['company_id'] = $companyId;
         $property = Property::create($validated);
 
         return redirect()->route('properties.show', $property)
@@ -80,8 +83,10 @@ class PropertyController extends Controller
             abort(403);
         }
         
+        $companyId = Auth::user()->company_id;
+        
         $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
+            'client_id' => ['required', Rule::exists('clients', 'id')->where('company_id', $companyId)],
             'name' => 'required|string|max:255',
             'property_type' => 'nullable|in:residential,commercial,industrial',
             'address' => 'required|string',
