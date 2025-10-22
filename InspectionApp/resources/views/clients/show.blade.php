@@ -186,7 +186,7 @@
                             <tbody>
                                 @foreach($client->inspections->take(10) as $inspection)
                                 <tr>
-                                    <td>{{ $inspection->scheduled_date ? $inspection->scheduled_date->format('M d, Y') : '-' }}</td>
+                                    <td>{{ $inspection->scheduled_at ? $inspection->scheduled_at->format('M d, Y') : '-' }}</td>
                                     <td>{{ $inspection->inspection_type }}</td>
                                     <td>
                                         @if($inspection->property)

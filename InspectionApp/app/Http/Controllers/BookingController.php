@@ -12,9 +12,9 @@ class BookingController extends Controller
     public function index()
     {
         $upcomingBookings = Inspection::where('company_id', auth()->user()->company_id)
-            ->where('scheduled_date', '>=', now())
+            ->where('scheduled_at', '>=', now())
             ->with(['property', 'property.client'])
-            ->orderBy('scheduled_date')
+            ->orderBy('scheduled_at')
             ->get();
 
         $properties = Property::where('company_id', auth()->user()->company_id)
@@ -49,9 +49,10 @@ class BookingController extends Controller
         Inspection::create([
             'company_id' => auth()->user()->company_id,
             'property_id' => $validated['property_id'],
+            'client_id' => $property->client_id,
             'inspector_id' => auth()->id(),
-            'scheduled_date' => $scheduledDateTime,
-            'type' => $validated['type'],
+            'scheduled_at' => $scheduledDateTime,
+            'inspection_type' => $validated['type'],
             'status' => 'scheduled',
             'notes' => $validated['notes'],
             'inspection_number' => 'INS-' . strtoupper(uniqid()),

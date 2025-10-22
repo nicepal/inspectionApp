@@ -133,7 +133,7 @@
                                     </a>
                                 </td>
                                 <td>{{ $inspection->property->name }}</td>
-                                <td>{{ \Carbon\Carbon::parse($inspection->scheduled_date)->format('M d, Y') }}</td>
+                                <td>{{ $inspection->scheduled_at->format('M d, Y') }}</td>
                                 <td>
                                     <span class="badge 
                                         @if($inspection->status == 'scheduled') bg-info

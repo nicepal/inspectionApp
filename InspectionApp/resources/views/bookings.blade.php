@@ -44,13 +44,13 @@
                     @forelse($upcomingBookings as $booking)
                     <tr>
                         <td>
-                            <strong>{{ \Carbon\Carbon::parse($booking->scheduled_date)->format('M d, Y') }}</strong><br>
-                            <small class="text-muted">{{ \Carbon\Carbon::parse($booking->scheduled_date)->format('h:i A') }}</small>
+                            <strong>{{ $booking->scheduled_at->format('M d, Y') }}</strong><br>
+                            <small class="text-muted">{{ $booking->scheduled_at->format('h:i A') }}</small>
                         </td>
                         <td>{{ $booking->property->name }}</td>
                         <td>{{ $booking->property->client->name }}</td>
                         <td>
-                            <span class="badge bg-primary">{{ ucfirst(str_replace('_', ' ', $booking->type)) }}</span>
+                            <span class="badge bg-primary">{{ ucfirst(str_replace('_', ' ', $booking->inspection_type)) }}</span>
                         </td>
                         <td>
                             <span class="badge 
