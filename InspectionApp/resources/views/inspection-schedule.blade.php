@@ -147,7 +147,7 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
 // Inspector availability checking
 document.addEventListener('DOMContentLoaded', function() {
@@ -203,6 +203,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     scheduledInput.addEventListener('change', updateInspectorAvailability);
+    
+    // Check availability on page load if datetime is set (e.g., from validation errors)
+    if (scheduledInput.value) {
+        updateInspectorAvailability();
+    }
 });
 </script>
-@endsection
+@endpush
