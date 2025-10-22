@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Inspection;
+use App\Models\InspectorAvailability;
 use App\Models\Property;
 use App\Models\Template;
 use App\Models\User;

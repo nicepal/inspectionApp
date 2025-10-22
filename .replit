@@ -1,7 +1,7 @@
 run = ["php", "main.php"]
 
 entrypoint = "main.php"
-modules = ["php-8.2", "nodejs-20"]
+modules = ["php-8.2", "nodejs-20", "postgresql-16"]
 
 [nix]
 channel = "stable-23_05"
@@ -36,10 +36,6 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 34481
-externalPort = 3002
 
 [[ports]]
 localPort = 36327

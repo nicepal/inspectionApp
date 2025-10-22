@@ -10,6 +10,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\InspectionTypeController;
+use App\Http\Controllers\InspectorAvailabilityController;
+use App\Http\Controllers\InspectorController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PropertyController;
@@ -41,6 +43,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('inspection-types', InspectionTypeController::class);
     Route::resource('subscriptions', SubscriptionController::class);
     Route::resource('staff', StaffController::class);
+    Route::resource('inspectors', InspectorController::class);
+    Route::get('/inspectors/{inspector}/availability', [InspectorController::class, 'availability'])->name('inspectors.availability');
+    Route::post('/inspectors/{inspector}/availability', [InspectorController::class, 'storeAvailability'])->name('inspectors.availability.store');
+    Route::get('/api/available-inspectors', [InspectorAvailabilityController::class, 'getAvailableInspectors'])->name('api.available-inspectors');
     
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');

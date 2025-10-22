@@ -170,6 +170,9 @@
                             <a class="nav-link @yield('staff-active')" href="{{ route('staff.index') }}">
                                 <i class="bi bi-person-badge"></i> Staff Management
                             </a>
+                            <a class="nav-link @yield('inspectors-active')" href="{{ route('inspectors.index') }}">
+                                <i class="bi bi-clipboard-check"></i> Inspectors
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('subscriptions.index') }}">
