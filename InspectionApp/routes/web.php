@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FollowUpController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\InspectionTypeController;
 use App\Http\Controllers\NotificationController;
@@ -27,7 +30,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('companies', CompanyController::class);
     Route::resource('clients', ClientController::class);
     Route::resource('properties', PropertyController::class);
+    Route::resource('areas', AreaController::class);
+    Route::resource('assets', AssetController::class);
     Route::resource('inspections', InspectionController::class);
+    Route::resource('follow-ups', FollowUpController::class);
     Route::resource('templates', TemplateController::class);
     Route::get('/template-center', [TemplateController::class, 'templateCenter'])->name('template-center.index');
     Route::post('/template-center/{template}/save', [TemplateController::class, 'saveToMyTemplates'])->name('template-center.save');
